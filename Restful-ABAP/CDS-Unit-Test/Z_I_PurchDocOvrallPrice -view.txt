@@ -9,7 +9,7 @@ define view Z_I_PurchDocOvrallPrice as select from  Z_I_PurchaseDoc {
     @Semantics.amount.currencyCode: 'Currency'
    // @DefaultAggregation: #NONE
     @ObjectModel.foreignKey.association: '_Currency'
-     _PurchaseDocumentItem.OverallItemPrice as OverallPrice,
+     sum(_PurchaseDocumentItem.OverallItemPrice) as OverallPrice,
 
     @Semantics.currencyCode: true
     _PurchaseDocumentItem.Currency,
@@ -18,6 +18,5 @@ define view Z_I_PurchDocOvrallPrice as select from  Z_I_PurchaseDoc {
     _PurchaseDocumentItem._Currency
 }
 group by
-_PurchaseDocumentItem.OverallItemPrice,
  PurchaseDocument,
  _PurchaseDocumentItem.Currency   
