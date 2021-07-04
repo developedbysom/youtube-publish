@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: com-order-html5
+description: Order Application
+version: 0.0.1
+modules:
+- name: com-order-html5-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: com-order-html5-dest-srv
+    parameters:
+      content-target: true
+  - name: com-order-html5-repo-host
+    parameters:
+      service-key:
+        name: com-order-html5-repo-host-key
+  - name: com-order-html5-uaa
+    parameters:
+      service-key:
+        name: com-order-html5-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: com-order-html5_repo_host
+          ServiceInstanceName: com-order-html5-html5-srv
+          ServiceKeyName: com-order-html5-repo-host-key
+          sap.cloud.service: com-order-html5
+        - Authentication: OAuth2UserTokenExchange
+          Name: com-order-html5_uaa
+          ServiceInstanceName: com-order-html5-xsuaa-srv
+          ServiceKeyName: com-order-html5-uaa-key
+          sap.cloud.service: com-order-html5
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: com-order-html5-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: com-order-html5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comorderhtml5.zip
+      name: comorderhtml5
+      target-path: resources/
+- name: comorderhtml5
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: com-order-html5-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: com-order-html5-dest-srv
+    service-plan: lite
+- name: com-order-html5-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: com-order-html5-xsuaa-srv
+    service-plan: application
+- name: com-order-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: com-order-html5-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

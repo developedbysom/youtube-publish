@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: com-customer-customer
+description: A Fiori application.
+version: 0.0.1
+modules:
+- name: com-customer-customer-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: com-customer-customer-dest-srv
+    parameters:
+      content-target: true
+  - name: com-customer-customer-repo-host
+    parameters:
+      service-key:
+        name: com-customer-customer-repo-host-key
+  - name: com-customer-customer-uaa
+    parameters:
+      service-key:
+        name: com-customer-customer-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: com-customer-customer_repo_host
+          ServiceInstanceName: com-customer-customer-html5-srv
+          ServiceKeyName: com-customer-customer-repo-host-key
+          sap.cloud.service: com-customer-customer
+        - Authentication: OAuth2UserTokenExchange
+          Name: com-customer-customer_uaa
+          ServiceInstanceName: com-customer-customer-xsuaa-srv
+          ServiceKeyName: com-customer-customer-uaa-key
+          sap.cloud.service: com-customer-customer
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: com-customer-customer-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: com-customer-customer-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comcustomercustomer.zip
+      name: comcustomercustomer
+      target-path: resources/
+- name: comcustomercustomer
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: com-customer-customer-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: com-customer-customer-dest-srv
+    service-plan: lite
+- name: com-customer-customer-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: com-customer-customer-xsuaa-srv
+    service-plan: application
+- name: com-customer-customer-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: com-customer-customer-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
