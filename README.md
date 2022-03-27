@@ -1,5 +1,17 @@
-# youtube-publish
+# Encryption - Decryption Using Pycryptodom
 
-This the central repository for any of the public project which I will share thru and you can search respective branch on the specific topic that interests you!!!
 
-My youtue channel details are here:
+## Set up
+
+1. Create virtual enironment
+
+`python -m venv venv`
+
+2. Activate virtual elvironemnt
+
+`cd venv/Script && activate` ==> for Windows <br>
+`cd venv/Script && source activate` ==> for Mac
+
+3. Install dependencies 
+
+`pip3 install pychryptodom pychalk`
