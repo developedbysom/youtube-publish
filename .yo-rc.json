@@ -1,0 +1,23 @@
+{
+  "generator-template-ui5-project": {
+    "projectname": "totp",
+    "namespaceUI5": "som.in",
+    "enableFPM": false,
+    "platform": "SAP NetWeaver",
+    "viewtype": "XML",
+    "ui5libs": "Content delivery network (SAPUI5)",
+    "newdir": false,
+    "initrepo": true,
+    "namespaceURI": "som/in",
+    "uimodules": [
+      "uimodule"
+    ],
+    "opa5Journeys": [
+      "Main"
+    ],
+    "opa5pos": [
+      "Main"
+    ],
+    "setupCompleted": true
+  }
+}

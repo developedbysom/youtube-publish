@@ -1,0 +1,84 @@
+<mvc:View
+    controllerName="som.in.totp.controller.MainView"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox
+            class="sapUiSmallMargin"
+            alignContent="Center"
+            alignItems="Center"
+        >
+            <f:SimpleForm
+                id="SimpleFormChange354wide"
+                backgroundDesign="Translucent"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="TOTP Token Generator"
+                labelSpanXL="12"
+                labelSpanL="12"
+                labelSpanM="12"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="4"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="2"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="true"
+                class="Cube"
+            >
+                <f:content>
+                    <Label
+                        labelFor="key"
+                        text="SECRET KEY"
+                    />
+                    <Input
+                        id="key"
+                        value="{TokenInfo>/securityKey}"
+                    />
+                    <Label text="NUMBER OF DIGITS" />
+                    <Input value="{TokenInfo>/tokenLength}" />
+                    <Label text="TOKEN PERIOD (IN SECONDS)" />
+                    <Input value="{TokenInfo>/tokenDuration}">
+                        <layoutData>
+                            <l:GridData span="XL12 L12 M12 S12" />
+                        </layoutData>
+                    </Input>
+                    <ProgressIndicator
+                        class="sapUiLargeMarginTop sapUiSmallMarginBottom"
+                        percentValue="{TokenInfo>/percentValue}"
+                        showValue="false"
+                        state="None"
+                        displayAnimation="false"
+                    >
+                        <layoutData>
+                            <l:GridData span="XL12 L12 M12 S12" />
+                        </layoutData>
+                    </ProgressIndicator>
+                    <VBox
+                        alignContent="Center"
+                        alignItems="Center"
+                        class="sapUiLargeMarginTop"
+                    >
+                        <Text text="{TokenInfo>/Token}" class="big"/>
+                        <!-- <Button
+                            text="get"
+                            press=".getToken"
+							 class="sapUiLargeMarginTop"
+                        /> -->
+                    </VBox>
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+    </Page>
+</mvc:View>
